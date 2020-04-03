@@ -18,3 +18,7 @@ spec:
             backend:
               serviceName: kube-bar-svc
               servicePort: 80
+          - path: /config/?(.*)
+            backend:
+              serviceName: kube-config-svc
+              servicePort: 80

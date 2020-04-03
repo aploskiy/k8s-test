@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-config-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kube-config-app
+  template:
+    metadata:
+      labels:
+        app: kube-config-app
+    spec:
+      volumes:
+        - name: logs-storage
+          persistentVolumeClaim:
+            claimName: kube-volume-claim
+      containers:
+        - name: kube-config-app
+          image: aploskiy/k8s-config:v3
+          ports:
+            - containerPort: 3003
+              protocol: TCP
+          volumeMounts:
+            - mountPath: "/logs/"
+              name: logs-storage
+          env:
+            - name: LOG_LEVEL
+              value: PRODACTION
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: kube-config-map
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kube-config-map
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: kube-config-map
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kube-dbpass
+                  key: DB_PASSWORD
