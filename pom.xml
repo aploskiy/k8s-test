@@ -12,6 +12,7 @@
         <module>foo</module>
         <module>bar</module>
         <module>config</module>
+        <module>config-init</module>
     </modules>
 
 

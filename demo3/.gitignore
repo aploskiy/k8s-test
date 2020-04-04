@@ -1,4 +1,4 @@
-foo/HELP.md
+HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
@@ -12,9 +12,6 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
-#log
-log.log
 
 ### IntelliJ IDEA ###
 .idea

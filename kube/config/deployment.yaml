@@ -16,6 +16,17 @@ spec:
         - name: logs-storage
           persistentVolumeClaim:
             claimName: kube-volume-claim
+      initContainers:
+        - name: kube-config-init
+          image: aploskiy/k8s-config-init:v1
+          volumeMounts:
+            - mountPath: "/logs/"
+              name: logs-storage
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
       containers:
         - name: kube-config-app
           image: aploskiy/k8s-config:v3

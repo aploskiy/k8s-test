@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kube-job
+spec:
+  template:
+    spec:
+      volumes:
+        - name: logs-storage
+          persistentVolumeClaim:
+            claimName: kube-volume-claim
+      containers:
+        - name: kube-job
+          image: aploskiy/k8s-config-job:v1
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          volumeMounts:
+            - mountPath: "/logs/"
+              name: logs-storage
+      restartPolicy: Never
+  backoffLimit: 4

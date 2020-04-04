@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: kube-cron
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: logs-storage
+              persistentVolumeClaim:
+                claimName: kube-volume-claim
+          restartPolicy: Never
+          containers:
+            - name: kube--cron
+              image: aploskiy/k8s-config-job:v1
+              env:
+                - name: POD_IP
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: status.podIP
+              volumeMounts:
+                - mountPath: "/logs/"
+                  name: logs-storage
